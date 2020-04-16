@@ -16,7 +16,7 @@ export default function ForumScreen(props) {
   let renderForumItem = ({item}) => <ForumItem forum={item} />;
 
   React.useEffect(() => {
-    // logout();
+    //logout();
     return firestore()
       .collection('forum')
       .onSnapshot((querySnapshot) => {
