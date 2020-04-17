@@ -28,25 +28,21 @@ export default function RegisterScreen(props) {
   let [type, setType] = useState(1);
   let [error, setError] = useState(null);
 
-  useEffect(() => {
-    return auth().onAuthStateChanged((user) =>
-      user
-        ? props.navigation.push(
-            type === 1 ? 'StudentRegisterDetail' : 'TeacherRegisterDetail',
-          )
-        : null,
-    );
-  }, []);
-
   let onChange = (key) => (value) => setFormData({...formData, [key]: value});
 
   let register = async () => {
     setLoading(true);
     try {
-      await auth().createUserWithEmailAndPassword(
+      let user = await auth().createUserWithEmailAndPassword(
         prepareEmailByType(formData.email, type),
         formData.password,
       );
+
+      if (user) {
+        props.navigation.push(
+          type === 1 ? 'StudentRegisterDetail' : 'TeacherRegisterDetail',
+        );
+      }
     } catch (error) {
       setError(errors[error.code] || error.message);
     }
@@ -121,20 +117,12 @@ export default function RegisterScreen(props) {
         <Button
           disabled={loading}
           onPress={register}
+          loading={loading}
           icon={'account'}
           style={styles.button}
           mode={'contained'}>
           Kayıt Ol
         </Button>
-
-        {loading ? (
-          <View
-            style={{
-              margin: 10,
-            }}>
-            <ActivityIndicator />
-          </View>
-        ) : null}
 
         <Button
           disabled={loading}

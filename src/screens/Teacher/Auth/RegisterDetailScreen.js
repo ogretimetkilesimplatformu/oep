@@ -25,13 +25,16 @@ let schoolName = [
 
 let grades = [1, 2, 3, 4, 5, 6, 7, 8];
 
-export default function RegisterScreen(props) {
+export default function RegisterDetailScreen(props) {
+  let [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState({});
   let [error, setError] = useState(null);
 
   let onChange = (key) => (value) => setFormData({...formData, [key]: value});
 
   let register = async () => {
+    setLoading(true);
+
     try {
       const user = auth().currentUser;
 
@@ -42,15 +45,15 @@ export default function RegisterScreen(props) {
       };
 
       firestore().collection('users').add(data);
+      await setUser(data);
 
       props.navigation.push('Panel', {
         screen: 'Teacher',
       });
-
-      await setUser(data);
     } catch (error) {
       setError(error.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -115,6 +118,7 @@ export default function RegisterScreen(props) {
           items={[
             {
               label: 'Nilufer',
+              value: 'Nilufer',
             },
           ]}
           value={formData.county}
@@ -136,18 +140,11 @@ export default function RegisterScreen(props) {
           }))}
           value={formData.grade}
         />
-        {loading ? (
-          <View
-            style={{
-              margin: 10,
-            }}>
-            <ActivityIndicator />
-          </View>
-        ) : null}
 
         <Button
           onPress={register}
           icon={'account'}
+          loading={loading}
           style={styles.button}
           mode={'contained'}>
           Kaydı Tamamla

@@ -25,27 +25,6 @@ export default function LoginScreen(props) {
     password: '',
   });
 
-  useEffect(() => {
-    return auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        let userFetch = await firestore()
-          .collection('users')
-          .where('id', '==', user.uid)
-          .get();
-
-        if (!userFetch.empty) {
-          let userDetails = userFetch.docs[0].data();
-
-          await setUser({...userDetails});
-
-          props.navigation.push('Panel', {
-            screen: type === 1 ? 'Student' : 'Teacher',
-          });
-        }
-      }
-    });
-  }, []);
-
   let [type, setType] = useState(1);
 
   let [error, setError] = useState(null);
@@ -55,10 +34,32 @@ export default function LoginScreen(props) {
     try {
       let email = formData.email;
 
-      await auth().signInWithEmailAndPassword(
+      let user = await auth().signInWithEmailAndPassword(
         prepareEmailByType(email, type),
         formData.password,
       );
+
+      if (!user) {
+        setError('Giriş Başarısız, bilgilerinizi kontrol ediniz');
+        return;
+      }
+
+      let userFetch = await firestore()
+        .collection('users')
+        .where('id', '==', user.user.uid)
+        .get();
+
+      if (!userFetch.empty) {
+        let userDetails = userFetch.docs[0].data();
+
+        await setUser({...userDetails});
+
+        console.log(type);
+
+        props.navigation.push('Panel', {
+          screen: type === 1 ? 'Student' : 'Teacher',
+        });
+      }
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
         setError('Geçersiz e-posta adresi');
@@ -136,6 +137,7 @@ export default function LoginScreen(props) {
         </View>
 
         <Button
+          loading={loading}
           disabled={loading}
           onPress={login}
           icon={'account'}
@@ -143,15 +145,6 @@ export default function LoginScreen(props) {
           mode={'contained'}>
           Giriş Yap
         </Button>
-
-        {loading ? (
-          <View
-            style={{
-              margin: 10,
-            }}>
-            <ActivityIndicator />
-          </View>
-        ) : null}
 
         <Button
           disabled={loading}

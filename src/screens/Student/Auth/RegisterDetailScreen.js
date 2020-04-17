@@ -25,7 +25,7 @@ let schoolName = [
 
 let grades = [1, 2, 3, 4, 5, 6, 7, 8];
 
-export default function RegisterScreen(props) {
+export default function RegisterDetailScreen(props) {
   let [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState({});
   let [error, setError] = useState(null);
