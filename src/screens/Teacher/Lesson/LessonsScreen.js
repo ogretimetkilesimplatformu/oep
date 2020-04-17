@@ -67,6 +67,7 @@ export default function LessonsScreen(props) {
         ) : (
           <WarningAlert warning={'Dersiniz Bulunmamaktadır'} />
         )}
+
       </ScrollView>
       <View
         style={{
