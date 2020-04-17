@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, ScrollView} from 'react-native';
-import {getUser} from '../../../helpers/user';
+import {getUser, logout} from '../../../helpers/user';
 import auth from '@react-native-firebase/auth';
 import {Image} from 'react-native-paper/src/components/Avatar/Avatar';
-import {Card, Chip, Divider, Headline, Title} from 'react-native-paper';
+import {Button, Card, Chip, Divider, Headline, Title} from 'react-native-paper';
 import ProfileItem from './components/ProfileItem';
 
 let items = [
@@ -14,6 +14,10 @@ let items = [
   {
     key: 'county',
     label: 'İlçe',
+  },
+  {
+    key: 'school_name',
+    label: 'Okul Adı',
   },
   {
     key: 'grade',
@@ -65,12 +69,6 @@ export default function ProfileScreen({navigation}) {
             {user.name}
           </Headline>
           <Divider />
-          <Title
-            style={{
-              textAlign: 'center',
-            }}>
-            {user.school_name}
-          </Title>
         </Card.Content>
       </Card>
 
@@ -102,6 +100,24 @@ export default function ProfileScreen({navigation}) {
           </View>
         </Card.Content>
       </Card>
+
+      <View
+        style={{
+          margin: 15,
+        }}>
+        <Button
+          onPress={async () => {
+            await logout();
+
+            navigation.push('Login');
+          }}
+          mode={'contained'}
+          style={{
+            marginTop: 15,
+          }}>
+          Çıkış Yap
+        </Button>
+      </View>
     </ScrollView>
   );
 }

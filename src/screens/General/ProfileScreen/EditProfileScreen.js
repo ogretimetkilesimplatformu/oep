@@ -39,7 +39,6 @@ const EditProfileScreen = ({navigation}) => {
 
     let authUser = auth().currentUser;
 
-    console.log(authUser);
     let docs = await firestore()
       .collection('users')
       .where('id', '==', authUser.uid)

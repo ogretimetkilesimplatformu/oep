@@ -6,6 +6,7 @@ import {ActivityIndicator, Chip, Headline} from 'react-native-paper';
 import LessonItem from './components/LessonItem';
 import {getActiveLessons} from '../../../helpers/lesson';
 import {navigate} from '../../../navigations/RootNavigation';
+import WarningAlert from '../../../components/WarningAlert';
 
 export default function LessonsScreen(props) {
   let [loading, setLoading] = useState(true);
@@ -57,14 +58,18 @@ export default function LessonsScreen(props) {
           }}>
           Aktif Dersler
         </Headline>
-        {lessons.actives.map((lesson, index) => (
-          <LessonItem
-            goItem={goItem(lesson)}
-            active
-            lesson={lesson}
-            key={index}
-          />
-        ))}
+        {lessons.actives.length ? (
+          lessons.actives.map((lesson, index) => (
+            <LessonItem
+              goItem={goItem(lesson)}
+              active
+              lesson={lesson}
+              key={index}
+            />
+          ))
+        ) : (
+          <WarningAlert warning={'Açık Dersiniz Bulunmamaktadır'} />
+        )}
 
         <View
           style={{
@@ -77,9 +82,13 @@ export default function LessonsScreen(props) {
             Kapalı Dersler
           </Headline>
 
-          {lessons.passives.map((lesson, index) => (
-            <LessonItem active={false} lesson={lesson} key={index} />
-          ))}
+          {lessons.passives.length ? (
+            lessons.passives.map((lesson, index) => (
+              <LessonItem active={false} lesson={lesson} key={index} />
+            ))
+          ) : (
+            <WarningAlert warning={'Kapalı Dersiniz Bulunmamaktadır'} />
+          )}
         </View>
       </ScrollView>
       <View

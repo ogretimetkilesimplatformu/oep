@@ -33,7 +33,13 @@ export default function TeacherRootNavigation() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Forum" component={ForumNavigation} />
-      <Tab.Screen name="Lessons" component={TeacherLessonsNavigation} />
+      <Tab.Screen
+        name="Lessons"
+        options={{
+          title: 'Derslerim',
+        }}
+        component={TeacherLessonsNavigation}
+      />
       <Tab.Screen name="Profile" component={ProfileNavigation} />
     </Tab.Navigator>
   );

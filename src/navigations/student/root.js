@@ -4,7 +4,6 @@ import StudentLessonsNavigation from './lessons';
 import ForumNavigation from '../forum';
 import ProfileNavigation from '../profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import TeacherLessonsNavigation from '../teacher/lessons';
 
 let Tab = createBottomTabNavigator();
 
@@ -34,7 +33,13 @@ export default function StudentRootNavigation() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Forum" component={ForumNavigation} />
-      <Tab.Screen name="Lessons" component={TeacherLessonsNavigation} />
+      <Tab.Screen
+        name="Lessons"
+        component={StudentLessonsNavigation}
+        options={{
+          title: 'Derslerim',
+        }}
+      />
       <Tab.Screen name="Profile" component={ProfileNavigation} />
     </Tab.Navigator>
   );

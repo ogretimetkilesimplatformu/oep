@@ -5,6 +5,7 @@ import {getUser} from '../../../helpers/user';
 import {ActivityIndicator, Chip, Headline} from 'react-native-paper';
 import {navigate} from '../../../navigations/RootNavigation';
 import LessonItem from '../../Student/Lesson/components/LessonItem';
+import WarningAlert from '../../../components/WarningAlert';
 
 export default function LessonsScreen(props) {
   let [loading, setLoading] = useState(true);
@@ -54,14 +55,18 @@ export default function LessonsScreen(props) {
           }}>
           Derslerim
         </Headline>
-        {lessons.map((lesson, index) => (
-          <LessonItem
-            goItem={goItem(lesson)}
-            active
-            lesson={lesson}
-            key={index}
-          />
-        ))}
+        {lessons.length ? (
+          lessons.map((lesson, index) => (
+            <LessonItem
+              goItem={goItem(lesson)}
+              active
+              lesson={lesson}
+              key={index}
+            />
+          ))
+        ) : (
+          <WarningAlert warning={'Dersiniz Bulunmamaktadır'} />
+        )}
       </ScrollView>
       <View
         style={{
