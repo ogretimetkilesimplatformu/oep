@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, ScrollView} from 'react-native';
 import {Button, Card, Chip, Divider, Headline, Title} from 'react-native-paper';
 import {Image} from 'react-native-paper/src/components/Avatar/Avatar';
-import {getUser} from '../../../helpers/user';
+import {getUser, setUser as setBaseUser} from '../../../helpers/user';
 import MaterialSelect from '../../../components/MaterialSelect';
 import ProfileEditItem from './components/ProfileEditItem';
 import auth from '@react-native-firebase/auth';
@@ -37,16 +37,17 @@ const EditProfileScreen = ({navigation}) => {
   const onSave = async () => {
     setLoading(true);
 
-    console.log(user);
+    let authUser = auth().currentUser;
 
+    console.log(authUser);
     let docs = await firestore()
       .collection('users')
-      .where('id', '==', user.id)
+      .where('id', '==', authUser.uid)
       .get();
 
     if (!docs.empty) {
       docs.docs.forEach((doc) => doc.ref.update(user));
-      await setUser(user);
+      await setBaseUser(user);
     }
 
     setLoading(false);
