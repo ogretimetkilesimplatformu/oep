@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "265579771636",
+    "firebase_url": "https://oep-app-a9281.firebaseio.com",
+    "project_id": "oep-app-a9281",
+    "storage_bucket": "oep-app-a9281.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265579771636:android:97cc62d9cee591ea72d0a1",
+        "android_client_info": {
+          "package_name": "com.oepapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265579771636-jkddf2bfn6ulmmll7k959ua0vbrhs26d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVdqSrQ7z55lS1KqNtMkUhPics_i5K5WU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265579771636-jkddf2bfn6ulmmll7k959ua0vbrhs26d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "265579771636-i6rbodop26ddbndqbfn2gjcvcltmlqrm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oep.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

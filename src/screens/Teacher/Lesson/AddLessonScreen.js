@@ -18,7 +18,9 @@ let createDefault = () => ({
   endDatetime: '',
 });
 
-export default function AddLessonScreen() {
+let grades = [1, 2, 3, 4, 5, 6, 7, 8];
+
+export default function AddLessonScreen(props) {
   let [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState({
     name: '',
@@ -36,7 +38,7 @@ export default function AddLessonScreen() {
     setLoading(true);
     let user = await getUser();
 
-    firestore()
+    await firestore()
       .collection('lessons')
       .add({
         ...formData,
@@ -44,6 +46,8 @@ export default function AddLessonScreen() {
         lesson_code: Math.random() * 1000,
         times: lessons,
       });
+
+    props.navigation.push('Lessons');
 
     setLoading(false);
   };
@@ -75,27 +79,22 @@ export default function AddLessonScreen() {
             backgroundColor: '#fff',
             padding: 30,
           }}>
-          {loading ? (
-            <View
-              style={{
-                alingItems: 'center',
-              }}>
-              <ActivityIndicator />
-            </View>
-          ) : null}
           <View
             styles={{
               flexDirection: 'row',
             }}>
             <TextInput
               label={'Ders Adı'}
-              onChange={(value) => onChange('name', value)}
+              onChangeText={(value) => onChange('name', value)}
               value={formData.name}
             />
             <View>
               <MaterialSelect
                 onChange={(value) => onChange('grade', value)}
-                items={[]}
+                items={grades.map((grade) => ({
+                  label: grade.toString(),
+                  value: grade.toString(),
+                }))}
                 placeholder={'Sınıf Seçiniz'}
                 value={formData.grade}
                 label={'Sınıf Seçiniz'}
@@ -153,6 +152,8 @@ export default function AddLessonScreen() {
             alignItems: 'center',
           }}>
           <Button
+            loading={loading}
+            disabled={loading}
             onPress={onSave}
             style={{
               marginTop: 20,
