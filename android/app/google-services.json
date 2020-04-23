@@ -1,42 +1,43 @@
 {
   "project_info": {
-    "project_number": "265579771636",
-    "firebase_url": "https://oep-app-a9281.firebaseio.com",
-    "project_id": "oep-app-a9281",
-    "storage_bucket": "oep-app-a9281.appspot.com"
+    "project_number": "17904556788",
+    "firebase_url": "https://oepapp-32f68.firebaseio.com",
+    "project_id": "oepapp-32f68",
+    "storage_bucket": "oepapp-32f68.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:265579771636:android:97cc62d9cee591ea72d0a1",
+        "mobilesdk_app_id": "1:17904556788:android:d38b061d6069d4286a9ca1",
         "android_client_info": {
           "package_name": "com.oepapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "265579771636-jkddf2bfn6ulmmll7k959ua0vbrhs26d.apps.googleusercontent.com",
+          "client_id": "17904556788-j3rgp52qfbftu41fh7qqv7hdvhqjkr44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oepapp",
+            "certificate_hash": "6ea1b224ccc35f6b41d961256f86901c75d24511"
+          }
+        },
+        {
+          "client_id": "17904556788-66uiop81i4k7drsbi4tkq863jftievdh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBVdqSrQ7z55lS1KqNtMkUhPics_i5K5WU"
+          "current_key": "AIzaSyCHyQHViJEk9f-BZVjBjdiw8l4qt9YHWKY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "265579771636-jkddf2bfn6ulmmll7k959ua0vbrhs26d.apps.googleusercontent.com",
+              "client_id": "17904556788-66uiop81i4k7drsbi4tkq863jftievdh.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "265579771636-i6rbodop26ddbndqbfn2gjcvcltmlqrm.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.oep.app"
-              }
             }
           ]
         }
