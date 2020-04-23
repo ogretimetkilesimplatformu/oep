@@ -15,6 +15,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import MaterialSelect from '../../../components/MaterialSelect';
 import ErrorAlert from '../../../components/ErrorAlert';
 import {setUser} from '../../../helpers/user';
+import {
+  fetchSelectData,
+  getCities,
+  getCounties,
+} from '../../../helpers/city_county';
 
 let schoolName = [
   {
@@ -29,9 +34,26 @@ export default function RegisterDetailScreen(props) {
   let [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState({});
   let [error, setError] = useState(null);
-
+  let [selectData, setSelectData] = useState({
+    cities: [],
+    counties: [],
+    schoolNames: [],
+    grades: [],
+  });
   let onChange = (key) => (value) => setFormData({...formData, [key]: value});
 
+  useEffect(() => {
+    let fetchOther = async () => {
+      let other = await fetchSelectData();
+
+      setSelectData({
+        ...selectData,
+        ...other,
+      });
+    };
+
+    fetchOther();
+  }, []);
   let register = async () => {
     setLoading(true);
 

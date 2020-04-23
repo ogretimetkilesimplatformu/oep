@@ -15,6 +15,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import MaterialSelect from '../../../components/MaterialSelect';
 import ErrorAlert from '../../../components/ErrorAlert';
 import {setUser} from '../../../helpers/user';
+import {
+  fetchSelectData,
+  getCities,
+  getCounties,
+} from '../../../helpers/city_county';
 
 let schoolName = [
   {
@@ -29,6 +34,25 @@ export default function RegisterDetailScreen(props) {
   let [loading, setLoading] = useState(false);
   let [formData, setFormData] = useState({});
   let [error, setError] = useState(null);
+  let [selectData, setSelectData] = useState({
+    cities: [],
+    counties: [],
+    schoolNames: [],
+    grades: [],
+  });
+
+  useEffect(() => {
+    let fetchOther = async () => {
+      let other = await fetchSelectData();
+
+      setSelectData({
+        ...selectData,
+        ...other,
+      });
+    };
+
+    fetchOther();
+  }, []);
 
   let onChange = (key) => (value) => setFormData({...formData, [key]: value});
 
@@ -108,19 +132,14 @@ export default function RegisterDetailScreen(props) {
         <MaterialSelect
           onChange={onChange('city')}
           label={'Görev Yaptığınız İl'}
-          items={[{label: 'Bursa', value: 'Bursa'}]}
+          items={selectData.cities}
           value={formData.city}
         />
 
         <MaterialSelect
           onChange={onChange('county')}
           label={'Görev Yaptığınız İlçe'}
-          items={[
-            {
-              label: 'Nilufer',
-              value: 'Nilufer',
-            },
-          ]}
+          items={selectData.counties}
           value={formData.county}
         />
 
