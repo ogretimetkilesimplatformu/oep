@@ -10,23 +10,13 @@ import {
   Button,
   Headline,
   TextInput,
+  Title,
 } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import MaterialSelect from '../../../components/MaterialSelect';
 import ErrorAlert from '../../../components/ErrorAlert';
 import {setUser} from '../../../helpers/user';
-import {
-  fetchSelectData,
-  getCities,
-  getCounties,
-} from '../../../helpers/city_county';
-
-let schoolName = [
-  {
-    value: 'Ondokuz Mayıs',
-    label: 'Ondokuz Mayıs',
-  },
-];
+import {fetchSelectData, filterCounties} from '../../../helpers/city_county';
 
 let grades = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -40,7 +30,10 @@ export default function RegisterDetailScreen(props) {
     schoolNames: [],
     grades: [],
   });
-  let onChange = (key) => (value) => setFormData({...formData, [key]: value});
+  let onChange = (key) => (value) => {
+    console.log(key, value);
+    setFormData({...formData, [key]: value});
+  };
 
   useEffect(() => {
     let fetchOther = async () => {
@@ -79,6 +72,12 @@ export default function RegisterDetailScreen(props) {
     setLoading(false);
   };
 
+  console.log(
+    formData,
+    selectData,
+    filterCounties(selectData.counties, formData.city),
+  );
+
   return (
     <KeyboardAvoidingView
       style={{
@@ -111,7 +110,9 @@ export default function RegisterDetailScreen(props) {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          <Headline style={{marginBottom: 30}}>Bilgilerinizi Giriniz</Headline>
+          <Title style={{marginBottom: 30}}>
+            Öğrenci Bilgilerinizi Giriniz
+          </Title>
         </View>
         {error ? <ErrorAlert error={error} /> : null}
 
@@ -133,19 +134,18 @@ export default function RegisterDetailScreen(props) {
           placeholder={'Lütfen il seçiniz'}
           label={'İl'}
           value={formData.city}
-          items={[{label: 'Bursa', value: 'Bursa'}]}
+          items={selectData.cities}
         />
 
         <MaterialSelect
           onChange={onChange('county')}
           placeholder={'Lütfen ilçe seçiniz'}
           label={'İlçe'}
-          items={[
-            {
-              label: 'Nilufer',
-              value: 'Nilufer',
-            },
-          ]}
+          items={
+            formData.city
+              ? filterCounties(selectData.counties, formData.city)
+              : []
+          }
           value={formData.county}
         />
 
@@ -153,7 +153,7 @@ export default function RegisterDetailScreen(props) {
           onChange={onChange('school_name')}
           placeholder={'Lütfen okul seçiniz'}
           label={'Okul adı'}
-          items={schoolName}
+          items={selectData.schoolNames}
           value={formData.school_name}
         />
 
@@ -161,10 +161,7 @@ export default function RegisterDetailScreen(props) {
           onChange={onChange('grade')}
           placeholder={'Lütfen sınıfınızı seçiniz'}
           label={'Sınıfınız'}
-          items={grades.map((item) => ({
-            label: item.toString(),
-            value: item.toString(),
-          }))}
+          items={selectData.grades}
           value={formData.grade}
         />
         {loading ? (

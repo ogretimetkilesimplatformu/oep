@@ -36,7 +36,7 @@ export default function MaterialSelect(props: Props) {
       ) : null}
       <RNPickerSelect
         value={value}
-        placeholder={placeholder}
+        placeholder={placeholder || 'Bir veri seçiniz'}
         onValueChange={onChange}
         items={items}
         style={pickerSelectStyles}

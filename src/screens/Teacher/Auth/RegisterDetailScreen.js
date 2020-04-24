@@ -10,6 +10,7 @@ import {
   Button,
   Headline,
   TextInput,
+  Title,
 } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import MaterialSelect from '../../../components/MaterialSelect';
@@ -17,6 +18,7 @@ import ErrorAlert from '../../../components/ErrorAlert';
 import {setUser} from '../../../helpers/user';
 import {
   fetchSelectData,
+  filterCounties,
   getCities,
   getCounties,
 } from '../../../helpers/city_county';
@@ -54,8 +56,10 @@ export default function RegisterDetailScreen(props) {
     fetchOther();
   }, []);
 
-  let onChange = (key) => (value) => setFormData({...formData, [key]: value});
-
+  let onChange = (key) => (value) => {
+    console.log(key, value);
+    setFormData({...formData, [key]: value});
+  };
   let register = async () => {
     setLoading(true);
 
@@ -112,7 +116,9 @@ export default function RegisterDetailScreen(props) {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          <Headline style={{marginBottom: 30}}>Bilgilerinizi Giriniz</Headline>
+          <Title style={{marginBottom: 30}}>
+            Öğretmen Bilgilerinizi Giriniz
+          </Title>
         </View>
         {error ? <ErrorAlert error={error} /> : null}
 
@@ -139,24 +145,25 @@ export default function RegisterDetailScreen(props) {
         <MaterialSelect
           onChange={onChange('county')}
           label={'Görev Yaptığınız İlçe'}
-          items={selectData.counties}
+          items={
+            formData.city
+              ? filterCounties(selectData.counties, formData.city)
+              : []
+          }
           value={formData.county}
         />
 
         <MaterialSelect
           onChange={onChange('school_name')}
           label={'Görev Yaptığınız Okul'}
-          items={schoolName}
+          items={selectData.schoolNames}
           value={formData.school_name}
         />
 
         <MaterialSelect
           onChange={onChange('grade')}
           label={'Sorumlu Olduğunuz Sınıf'}
-          items={grades.map((item) => ({
-            label: item.toString(),
-            value: item.toString(),
-          }))}
+          items={selectData.grades}
           value={formData.grade}
         />
 

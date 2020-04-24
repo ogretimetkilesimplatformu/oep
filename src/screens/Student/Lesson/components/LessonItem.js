@@ -1,6 +1,6 @@
 import React, {useState, useEffect, memo} from 'react';
 import {View} from 'react-native';
-import {Subheading, Title} from 'react-native-paper';
+import {Subheading, Text, Title} from 'react-native-paper';
 import TouchableRipple from 'react-native-paper/src/components/TouchableRipple/index';
 
 export type TimeType = {
@@ -21,11 +21,11 @@ type Props = {
 
 function LessonItem(props: Props) {
   let {
-    lesson: {name},
+    lesson: {name, lesson_code},
   } = props;
   return (
     <TouchableRipple
-      onPress={() => (props.active ? props.goItem : null)}
+      onPress={props.active ? props.goItem : null}
       style={{
         paddingVertical: 10,
         paddingHorizontal: 5,
@@ -34,7 +34,14 @@ function LessonItem(props: Props) {
         backgroundColor: '#fff',
         opacity: props.active ? 1 : 0.6,
       }}>
-      <Subheading>{name}</Subheading>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <Title>{name}</Title>
+        {props.teacher ? <Title>{lesson_code}</Title> : null}
+      </View>
     </TouchableRipple>
   );
 }

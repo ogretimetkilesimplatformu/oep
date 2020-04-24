@@ -13,6 +13,10 @@ let buildDataFromFirestore = (snapshot) => {
   return data;
 };
 
+export function filterCounties(allCounties = [], city) {
+  return [...allCounties].filter((county) => county.city === city);
+}
+
 export async function getCities() {
   let snapshot = await firestore().collection('cities').get();
 

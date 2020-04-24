@@ -36,7 +36,7 @@ export default function AddPostForm(props) {
         margin: 15,
       }}>
       <TextInput
-        label="Yorumunuz"
+        label="Gönderi"
         value={post.message}
         onChangeText={(text) =>
           setPost({

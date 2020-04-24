@@ -7,20 +7,28 @@ import MaterialSelect from '../../../components/MaterialSelect';
 import ProfileEditItem from './components/ProfileEditItem';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
-let schoolName = [
-  {
-    value: 'Ondokuz Mayıs',
-    label: 'Ondokuz Mayıs',
-  },
-];
+import {fetchSelectData, filterCounties} from '../../../helpers/city_county';
 
 const EditProfileScreen = ({navigation}) => {
   let [loading, setLoading] = useState(false);
   let [user, setUser] = useState({});
   let onChange = (key) => (value) => setUser({...user, [key]: value});
-
+  let [selectData, setSelectData] = useState({
+    cities: [],
+    counties: [],
+    schoolNames: [],
+    grades: [],
+  });
   useEffect(() => {
+    let fetchOther = async () => {
+      let other = await fetchSelectData();
+
+      setSelectData({
+        ...selectData,
+        ...other,
+      });
+    };
+
     let fetchUser = async () => {
       let userDetails = await getUser();
 
@@ -31,6 +39,7 @@ const EditProfileScreen = ({navigation}) => {
 
     return navigation.addListener('focus', () => {
       fetchUser();
+      fetchOther();
     });
   }, []);
 
@@ -50,6 +59,7 @@ const EditProfileScreen = ({navigation}) => {
     }
 
     setLoading(false);
+    navigation.goBack();
   };
 
   console.log(user);
@@ -98,7 +108,7 @@ const EditProfileScreen = ({navigation}) => {
             <MaterialSelect
               onChange={onChange('city')}
               value={user.city}
-              items={[{label: 'Bursa', value: 'Bursa'}]}
+              items={selectData.cities}
             />
           </ProfileEditItem>
 
@@ -106,7 +116,9 @@ const EditProfileScreen = ({navigation}) => {
             <MaterialSelect
               onChange={onChange('county')}
               value={user.county}
-              items={[{label: 'Nilüfer', value: 'Nilufer'}]}
+              items={
+                user.city ? filterCounties(selectData.counties, user.city) : []
+              }
             />
           </ProfileEditItem>
 
@@ -114,17 +126,14 @@ const EditProfileScreen = ({navigation}) => {
             <MaterialSelect
               onChange={onChange('school_name')}
               value={user.school_name}
-              items={schoolName}
+              items={selectData.schoolNames}
             />
           </ProfileEditItem>
           <ProfileEditItem label={'Sınıf'}>
             <MaterialSelect
               onChange={onChange('grade')}
               value={user.grade}
-              items={[1, 2, 3, 4, 5, 6, 7, 8].map((grade) => ({
-                label: grade.toString(),
-                value: grade.toString(),
-              }))}
+              items={selectData.grades}
             />
           </ProfileEditItem>
 

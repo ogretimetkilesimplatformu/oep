@@ -1,32 +1,52 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, TouchableOpacity} from 'react-native';
 import {
-  ActivityIndicator,
   Button,
-  Headline,
+  Text,
   TextInput,
   Title,
+  TouchableRipple,
 } from 'react-native-paper';
 import MaterialSelect from '../../../components/MaterialSelect';
-import DatePicker from 'react-native-datepicker';
-import moment from 'moment';
 import MaterialDateTimeSelect from '../../../components/MaterialDateTimeSelect';
 import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../../helpers/user';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getGrades} from '../../../helpers/city_county';
+
+const removeItem = (items, i) =>
+  items.slice(0, i - 1).concat(items.slice(i, items.length));
+
 let createDefault = () => ({
   startDatetime: '',
   endDatetime: '',
 });
 
-export default function AddLessonScreen(props) {
-  let [loading, setLoading] = useState(false);
-  let [formData, setFormData] = useState({
-    name: '',
-    grade: '',
-  });
+export default function EditLessonScreen(props) {
+  let {
+    route: {
+      params: {lesson},
+    },
+  } = props;
+
   let [grades, setGrades] = useState([]);
 
+  let [loading, setLoading] = useState(false);
+  let [formData, setFormData] = useState({
+    ...lesson,
+  });
+
+  let [lessons, setLessons] = useState([...lesson.times]);
+
+  useEffect(() => {
+    getGrades().then((gradesFetched) => setGrades(gradesFetched));
+  }, []);
+
+  console.log(grades);
+
+  let removeLine = (index) => {
+    setLessons([...lessons].filter((_, i) => i !== index));
+  };
   let onChange = (key, value) => {
     setFormData({
       ...formData,
@@ -34,20 +54,16 @@ export default function AddLessonScreen(props) {
     });
   };
 
-  useEffect(() => {
-    getGrades().then((gradesFetched) => setGrades(gradesFetched));
-  }, []);
-
   let onSave = async () => {
     setLoading(true);
     let user = await getUser();
 
     await firestore()
       .collection('lessons')
-      .add({
+      .doc(lesson.id)
+      .update({
         ...formData,
         teacher_id: user.id,
-        lesson_code: (Math.floor(Math.random() * 1000) + 1000).toString(),
         times: lessons,
       });
 
@@ -66,12 +82,6 @@ export default function AddLessonScreen(props) {
 
     setLessons(lessonsLocal);
   };
-
-  let [lessons, setLessons] = useState([
-    {
-      ...createDefault(),
-    },
-  ]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -105,30 +115,47 @@ export default function AddLessonScreen(props) {
 
           <View>
             <Title>Ders Saatleri</Title>
-            {lessons.map((lesson, index) => {
-              return (
-                <View key={index} style={styles.lessonContainer}>
-                  <MaterialDateTimeSelect
-                    value={lesson.startDatetime}
-                    label={'Başlangıç Tarihi'}
-                    mode={'datetime'}
-                    placeholder={'Başlagıç Tarihi'}
-                    onChange={(value) =>
-                      onLessonChange(index, 'startDatetime', value)
-                    }
-                  />
-                  <MaterialDateTimeSelect
-                    value={lesson.endDatetime}
-                    label={'Bitiş Tarihi'}
-                    mode={'datetime'}
-                    placeholder={'Başlagıç Tarihi'}
-                    onChange={(value) =>
-                      onLessonChange(index, 'endDatetime', value)
-                    }
-                  />
-                </View>
-              );
-            })}
+            {lessons
+              .filter((lesson) => !!lesson)
+              .map((lesson, index) => {
+                return (
+                  <View key={index} style={styles.lessonContainer}>
+                    <MaterialDateTimeSelect
+                      value={lesson.startDatetime}
+                      label={'Başlangıç Tarihi'}
+                      mode={'datetime'}
+                      placeholder={'Başlagıç Tarihi'}
+                      onChange={(value) =>
+                        onLessonChange(index, 'startDatetime', value)
+                      }
+                    />
+                    <MaterialDateTimeSelect
+                      value={lesson.endDatetime}
+                      label={'Bitiş Tarihi'}
+                      mode={'datetime'}
+                      placeholder={'Başlagıç Tarihi'}
+                      onChange={(value) =>
+                        onLessonChange(index, 'endDatetime', value)
+                      }
+                    />
+
+                    <TouchableOpacity
+                      onPress={() => removeLine(index)}
+                      style={{
+                        marginTop: 25,
+                        marginLeft: 5,
+                      }}>
+                      <MaterialCommunityIcons
+                        name={'minus-circle-outline'}
+                        style={{
+                          fontSize: 25,
+                          color: '#f00',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
           </View>
 
           <View>
@@ -178,6 +205,7 @@ let styles = {
   lessonContainer: {
     flexDirection: 'row',
     marginTop: 15,
+    alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     paddingBottom: 15,

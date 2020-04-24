@@ -11,13 +11,17 @@ export default function LessonsScreen(props) {
   let [loading, setLoading] = useState(true);
   let [lessons, setLessons] = useState([]);
 
-  let goItem = (lesson) => () => {};
+  let goItem = (lesson) => () => {
+    console.log(props);
+
+    props.navigation.push('EditLesson', {
+      lesson,
+    });
+  };
 
   useEffect(() => {
     let fetchItems = async () => {
       let user = await getUser();
-
-      console.log(user);
 
       return firestore()
         .collection('lessons')
@@ -26,7 +30,7 @@ export default function LessonsScreen(props) {
           let items = [];
 
           querySnapshot.docs.forEach((item) => {
-            let data = {...item.data()};
+            let data = {...item.data(), id: item.id};
             items.push(data);
           });
 
@@ -55,11 +59,24 @@ export default function LessonsScreen(props) {
           }}>
           Derslerim
         </Headline>
+        <LessonItem
+          active
+          teacher
+          lesson={{
+            name: 'Ders Adı',
+            lesson_code: 'Ders Kodu',
+          }}
+        />
+        <View
+          style={{
+            margin: 5,
+          }}></View>
         {lessons.length ? (
           lessons.map((lesson, index) => (
             <LessonItem
               goItem={goItem(lesson)}
               active
+              teacher
               lesson={lesson}
               key={index}
             />
@@ -67,7 +84,6 @@ export default function LessonsScreen(props) {
         ) : (
           <WarningAlert warning={'Dersiniz Bulunmamaktadır'} />
         )}
-
       </ScrollView>
       <View
         style={{
