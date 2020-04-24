@@ -59,10 +59,16 @@ export default function LoginScreen(props) {
         props.navigation.push('Panel', {
           screen: type === 1 ? 'Student' : 'Teacher',
         });
+      } else {
+        props.navigation.push(
+          type === 1 ? 'StudentRegisterDetail' : 'TeacherRegisterDetail',
+        );
       }
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
         setError('Geçersiz e-posta adresi');
+      } else if (error.code === 'auth/user-not-found') {
+        setError('Kullanıcı Bulunamadı');
       } else {
         setError(error.message);
       }
@@ -120,6 +126,8 @@ export default function LoginScreen(props) {
             onChangeText={onChange('email')}
             label={'Email'}
             autoCapitalize={'none'}
+            autoCorrect={false}
+            autoCompleteType={'email'}
             placeholder={'E-posta adresinizi giriniz'}
           />
         </View>
@@ -131,6 +139,8 @@ export default function LoginScreen(props) {
           <TextInput
             onChangeText={onChange('password')}
             secureTextEntry
+            autoCompleteType={'password'}
+            autoCorrect={false}
             label={'Şifre'}
             placeholder={'Şifrenizi giriniz'}
           />

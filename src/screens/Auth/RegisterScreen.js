@@ -96,6 +96,7 @@ export default function RegisterScreen(props) {
             onChangeText={onChange('email')}
             label={'Email'}
             value={formData.email}
+            autoCompleteType={'email'}
             autoCapitalize={'none'}
             placeholder={'E-posta adresinizi giriniz'}
           />
@@ -106,6 +107,8 @@ export default function RegisterScreen(props) {
             width: '100%',
           }}>
           <TextInput
+            autoCompleteType={'password'}
+            autoCorrect={false}
             onChangeText={onChange('password')}
             secureTextEntry
             label={'Şifre'}

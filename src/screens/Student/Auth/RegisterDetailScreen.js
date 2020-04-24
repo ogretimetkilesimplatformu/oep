@@ -12,13 +12,10 @@ import {
   TextInput,
   Title,
 } from 'react-native-paper';
-import RNPickerSelect from 'react-native-picker-select';
 import MaterialSelect from '../../../components/MaterialSelect';
 import ErrorAlert from '../../../components/ErrorAlert';
 import {setUser} from '../../../helpers/user';
 import {fetchSelectData, filterCounties} from '../../../helpers/city_county';
-
-let grades = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export default function RegisterDetailScreen(props) {
   let [loading, setLoading] = useState(false);
@@ -71,12 +68,6 @@ export default function RegisterDetailScreen(props) {
 
     setLoading(false);
   };
-
-  console.log(
-    formData,
-    selectData,
-    filterCounties(selectData.counties, formData.city),
-  );
 
   return (
     <KeyboardAvoidingView
