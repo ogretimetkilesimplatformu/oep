@@ -46,6 +46,7 @@ export default function CommentsScreen(props: Props) {
       });
 
     setShowAddCommentForm(false);
+    setComment('');
     setLoading(false);
 
     await firestore()
