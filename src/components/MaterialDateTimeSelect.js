@@ -4,7 +4,8 @@ import DatePicker from 'react-native-datepicker';
 import {View, Platform, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import {Paragraph, Text, TextInput} from 'react-native-paper';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import RNDatetimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 type Props = {
   value: string,
@@ -36,17 +37,18 @@ export default function MaterialDateTimeSelect(props: Props) {
   };
 
   let onChange = (value) => {
-    setMode(mode === 'date' ? 'time' : 'date');
-
-    props.onChange(value);
-
     if (mode === 'time') {
       hideDatePicker();
     }
+    setMode(mode === 'date' ? 'time' : 'date');
+
+    props.onChange(value);
   };
 
   let minDate = props.minDate || moment().subtract(10, 'years');
   let maxDate = props.maxDate || moment().add(10, 'years');
+
+  console.log(mode);
 
   return (
     <View>
@@ -72,13 +74,21 @@ export default function MaterialDateTimeSelect(props: Props) {
                 ? moment(props.value).format(formats.datetime)
                 : props.placeholder || props.label}
             </Text>
+
+            {isDatePickerVisible ? (
+              <RNDateTimePicker
+                mode={mode}
+                value={props.value || new Date()}
+                placeholder={' '}
+                is24Hour
+                testID="dateTimePicker"
+                timeZoneOffsetInMinutes={0}
+                minimumDate={minDate.toDate()}
+                maximumDate={maxDate.toDate()}
+                onChange={(_, date) => onChange(date)}
+              />
+            ) : null}
           </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode={mode}
-            onConfirm={onChange}
-            onCancel={hideDatePicker}
-          />
         </View>
       ) : (
         <DatePicker
