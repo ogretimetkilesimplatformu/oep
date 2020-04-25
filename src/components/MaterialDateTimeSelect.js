@@ -60,7 +60,7 @@ export default function MaterialDateTimeSelect(props: Props) {
           {props.label}
         </Paragraph>
       ) : null}
-      {Platform.OS === 'ios' ? (
+      {Platform.OS === 'android' ? (
         <View>
           <TouchableOpacity onPress={showDatePicker}>
             <Text
