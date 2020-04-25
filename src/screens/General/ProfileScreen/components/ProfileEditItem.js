@@ -25,7 +25,6 @@ const ProfileItem = (props: Props) => {
         },
         style,
       ]}>
-      <Title>{label}</Title>
       <View>{children}</View>
     </View>
   );

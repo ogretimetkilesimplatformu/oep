@@ -104,38 +104,42 @@ const EditProfileScreen = ({navigation}) => {
           style={{
             padding: 15,
           }}>
-          <ProfileEditItem label={'İl'}>
+          <View>
             <MaterialSelect
+              label={'İl'}
               onChange={onChange('city')}
               value={user.city}
               items={selectData.cities}
             />
-          </ProfileEditItem>
+          </View>
 
-          <ProfileEditItem label={'İlçe'}>
+          <View>
             <MaterialSelect
+              label={'İlçe'}
               onChange={onChange('county')}
               value={user.county}
               items={
                 user.city ? filterCounties(selectData.counties, user.city) : []
               }
             />
-          </ProfileEditItem>
+          </View>
 
-          <ProfileEditItem label={'Okul'}>
+          <View>
             <MaterialSelect
               onChange={onChange('school_name')}
+              label={'Okul Adı'}
               value={user.school_name}
               items={selectData.schoolNames}
             />
-          </ProfileEditItem>
-          <ProfileEditItem label={'Sınıf'}>
+          </View>
+          <View>
             <MaterialSelect
+              label={'Sınıf'}
               onChange={onChange('grade')}
               value={user.grade}
               items={selectData.grades}
             />
-          </ProfileEditItem>
+          </View>
 
           <Button
             loading={loading}

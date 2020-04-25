@@ -24,6 +24,7 @@ export let formats = {
 
 export default function MaterialDateTimeSelect(props: Props) {
   let format = formats[props.mode];
+  const [mode, setMode] = React.useState('date');
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
 
   const showDatePicker = () => {
@@ -32,6 +33,16 @@ export default function MaterialDateTimeSelect(props: Props) {
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
+  };
+
+  let onChange = (value) => {
+    setMode(mode === 'date' ? 'time' : 'date');
+
+    props.onChange(value);
+
+    if (mode === 'time') {
+      hideDatePicker();
+    }
   };
 
   let minDate = props.minDate || moment().subtract(10, 'years');
@@ -64,11 +75,8 @@ export default function MaterialDateTimeSelect(props: Props) {
           </TouchableOpacity>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
-            mode="datetime"
-            onConfirm={(value) => {
-              props.onChange(value);
-              hideDatePicker();
-            }}
+            mode={mode}
+            onConfirm={onChange}
             onCancel={hideDatePicker}
           />
         </View>
