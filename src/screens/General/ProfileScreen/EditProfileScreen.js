@@ -62,7 +62,7 @@ const EditProfileScreen = ({navigation}) => {
     navigation.goBack();
   };
 
-  console.log(user);
+  console.log(selectData);
 
   return (
     <ScrollView

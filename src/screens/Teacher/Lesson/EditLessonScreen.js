@@ -8,18 +8,21 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import MaterialSelect from '../../../components/MaterialSelect';
-import MaterialDateTimeSelect from '../../../components/MaterialDateTimeSelect';
+import MaterialDateTimeSelect, {
+  formats,
+} from '../../../components/MaterialDateTimeSelect';
 import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../../helpers/user';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getGrades} from '../../../helpers/city_county';
+import moment from 'moment';
 
 const removeItem = (items, i) =>
   items.slice(0, i - 1).concat(items.slice(i, items.length));
 
 let createDefault = () => ({
-  startDatetime: '',
-  endDatetime: '',
+  startDatetime: undefined,
+  endDatetime: undefined,
 });
 
 export default function EditLessonScreen(props) {
@@ -36,7 +39,13 @@ export default function EditLessonScreen(props) {
     ...lesson,
   });
 
-  let [lessons, setLessons] = useState([...lesson.times]);
+  let [lessons, setLessons] = useState([
+    ...lesson.times.map((lesson) => ({
+      ...lesson,
+      startDatetime: moment(lesson.startDatetime).toDate(),
+      endDatetime: moment(lesson.endDatetime).toDate(),
+    })),
+  ]);
 
   useEffect(() => {
     getGrades().then((gradesFetched) => setGrades(gradesFetched));
@@ -45,7 +54,7 @@ export default function EditLessonScreen(props) {
   console.log(grades);
 
   let removeLine = (index) => {
-    setLessons([...lessons].filter((_, i) => i !== index));
+    setLessons(removeLine([...lessons], index));
   };
   let onChange = (key, value) => {
     setFormData({
@@ -64,7 +73,11 @@ export default function EditLessonScreen(props) {
       .update({
         ...formData,
         teacher_id: user.id,
-        times: lessons,
+        times: lessons.map((lesson) => ({
+          ...lesson,
+          startDatetime: moment(lesson.startDatetime).format(formats.datetime),
+          endDatetime: moment(lesson.endDatetime).format(formats.datetime),
+        })),
       });
 
     props.navigation.push('Lessons');

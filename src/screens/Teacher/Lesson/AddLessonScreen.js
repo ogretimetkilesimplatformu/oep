@@ -1,22 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {View, ScrollView} from 'react-native';
-import {
-  ActivityIndicator,
-  Button,
-  Headline,
-  TextInput,
-  Title,
-} from 'react-native-paper';
+import {Button, TextInput, Title} from 'react-native-paper';
 import MaterialSelect from '../../../components/MaterialSelect';
-import DatePicker from 'react-native-datepicker';
-import moment from 'moment';
-import MaterialDateTimeSelect from '../../../components/MaterialDateTimeSelect';
+import MaterialDateTimeSelect, {
+  formats,
+} from '../../../components/MaterialDateTimeSelect';
 import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../../helpers/user';
 import {getGrades} from '../../../helpers/city_county';
+import moment from 'moment';
 let createDefault = () => ({
-  startDatetime: '',
-  endDatetime: '',
+  startDatetime: undefined,
+  endDatetime: undefined,
 });
 
 export default function AddLessonScreen(props) {
@@ -48,7 +43,11 @@ export default function AddLessonScreen(props) {
         ...formData,
         teacher_id: user.id,
         lesson_code: (Math.floor(Math.random() * 1000) + 1000).toString(),
-        times: lessons,
+        times: lessons.map((lesson) => ({
+          ...lesson,
+          startDatetime: moment(lesson.startDatetime).format(formats.datetime),
+          endDatetime: moment(lesson.endDatetime).format(formats.datetime),
+        })),
       });
 
     props.navigation.push('Lessons');
@@ -112,7 +111,7 @@ export default function AddLessonScreen(props) {
                     value={lesson.startDatetime}
                     label={'Başlangıç Tarihi'}
                     mode={'datetime'}
-                    placeholder={'Başlagıç Tarihi'}
+                    placeholder={'Başlagıç Tarihi Seçiniz'}
                     onChange={(value) =>
                       onLessonChange(index, 'startDatetime', value)
                     }
@@ -121,7 +120,7 @@ export default function AddLessonScreen(props) {
                     value={lesson.endDatetime}
                     label={'Bitiş Tarihi'}
                     mode={'datetime'}
-                    placeholder={'Başlagıç Tarihi'}
+                    placeholder={'Bitiş Tarihi Seçiniz'}
                     onChange={(value) =>
                       onLessonChange(index, 'endDatetime', value)
                     }
