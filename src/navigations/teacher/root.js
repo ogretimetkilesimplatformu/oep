@@ -4,6 +4,7 @@ import TeacherLessonsNavigation from './lessons';
 import ForumNavigation from '../forum';
 import ProfileNavigation from '../profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TeacherFormNavigation from './forms';
 
 let Tab = createBottomTabNavigator();
 
@@ -20,6 +21,8 @@ export default function TeacherRootNavigation() {
               : 'ios-information-circle-outline';
           } else if (route.name === 'Lessons') {
             iconName = focused ? 'ios-list-box' : 'ios-list';
+          } else if (route.name === 'Forms') {
+            iconName = focused ? 'ios-bookmark' : 'ios-bookmark';
           } else {
             iconName = 'ios-person';
           }
@@ -33,6 +36,13 @@ export default function TeacherRootNavigation() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Forum" component={ForumNavigation} />
+      <Tab.Screen
+        name="Forms"
+        options={{
+          title: 'Anketler',
+        }}
+        component={TeacherFormNavigation}
+      />
       <Tab.Screen
         name="Lessons"
         options={{

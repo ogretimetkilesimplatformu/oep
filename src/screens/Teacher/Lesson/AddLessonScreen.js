@@ -16,6 +16,7 @@ let createDefault = () => ({
 
 export default function AddLessonScreen(props) {
   let [loading, setLoading] = useState(false);
+  let [forms, setForms] = useState([]);
   let [formData, setFormData] = useState({
     name: '',
     grade: '',
@@ -30,6 +31,19 @@ export default function AddLessonScreen(props) {
   };
 
   useEffect(() => {
+    firestore()
+      .collection('forms')
+      .onSnapshot((querySnapshot) => {
+        let items = [];
+        if (!querySnapshot.empty) {
+          querySnapshot.docs.forEach((item) => {
+            let data = {...item.data(), id: item.id};
+            items.push(data);
+          });
+        }
+        setForms(items);
+      });
+
     getGrades().then((gradesFetched) => setGrades(gradesFetched));
   }, []);
 
@@ -91,6 +105,18 @@ export default function AddLessonScreen(props) {
               onChangeText={(value) => onChange('name', value)}
               value={formData.name}
             />
+            <View>
+              <MaterialSelect
+                onChange={(value) => onChange('form_id', value)}
+                items={forms.map((item) => ({
+                  label: item.title,
+                  value: item.id,
+                }))}
+                value={formData.form_id}
+                placeholder={'Form Seçiniz'}
+                label={'Form Seçiniz'}
+              />
+            </View>
             <View>
               <MaterialSelect
                 onChange={(value) => onChange('grade', value)}

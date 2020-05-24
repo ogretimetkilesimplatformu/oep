@@ -3,7 +3,7 @@ import {View, FlatList} from 'react-native';
 import {fetchLessonAnswers} from './fetch';
 import CenteredLoading from '../../../components/CenteredLoading';
 import LessonFormItem from './components/LessonFormItem';
-import {Title, Subheading} from 'react-native-paper';
+import {Subheading} from 'react-native-paper';
 
 const LessonFormAnswersScreen = (props) => {
   let {
