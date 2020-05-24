@@ -51,8 +51,6 @@ export default function EditLessonScreen(props) {
     getGrades().then((gradesFetched) => setGrades(gradesFetched));
   }, []);
 
-  console.log(grades);
-
   let removeLine = (index) => {
     setLessons(removeLine([...lessons], index));
   };

@@ -1,14 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 import {exp} from 'react-native-reanimated';
 
-let buildDataFromFirestore = (snapshot) => {
+export let buildDataFromFirestore = (snapshot) => {
   let data = [];
 
   if (snapshot.empty) {
     return [];
   }
 
-  snapshot.docs.forEach((item) => data.push({...item.data()}));
+  snapshot.docs.forEach((item) => data.push({...item.data(), id: item.id}));
 
   return data;
 };

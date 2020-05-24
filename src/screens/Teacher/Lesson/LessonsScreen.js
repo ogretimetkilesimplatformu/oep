@@ -14,7 +14,7 @@ export default function LessonsScreen(props) {
   let goItem = (lesson) => () => {
     console.log(props);
 
-    props.navigation.push('EditLesson', {
+    props.navigation.push('LessonFormAnswers', {
       lesson,
     });
   };
@@ -29,13 +29,15 @@ export default function LessonsScreen(props) {
         .onSnapshot((querySnapshot) => {
           let items = [];
 
-          querySnapshot.docs.forEach((item) => {
-            let data = {...item.data(), id: item.id};
-            items.push(data);
-          });
+          if (querySnapshot) {
+            querySnapshot.docs.forEach((item) => {
+              let data = {...item.data(), id: item.id};
+              items.push(data);
+            });
 
-          setLessons(items);
-          setLoading(false);
+            setLessons(items);
+            setLoading(false);
+          }
         });
     };
 

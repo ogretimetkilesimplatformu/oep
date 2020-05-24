@@ -12,7 +12,12 @@ export default function LessonsScreen(props) {
   let [loading, setLoading] = useState(true);
   let [lessons, setLessons] = useState({actives: [], passives: []});
 
-  let goItem = (lesson) => () => {};
+  let goItem = (lesson) => () => {
+    props.navigation.push('Test', {
+      id: lesson.form_id,
+      lesson: lesson,
+    });
+  };
 
   useEffect(() => {
     let fetchItems = async () => {
@@ -24,17 +29,19 @@ export default function LessonsScreen(props) {
         .onSnapshot((querySnapshot) => {
           let items = [];
 
-          querySnapshot.docs.forEach((item) => {
-            let data = {...item.data()};
-            items.push(data.lesson);
-          });
+          if (querySnapshot) {
+            querySnapshot.docs.forEach((item) => {
+              let data = {...item.data()};
+              items.push(data.lesson);
+            });
 
-          let [actives, passives] = getActiveLessons(items);
-          setLessons({
-            actives,
-            passives,
-          });
-          setLoading(false);
+            let [actives, passives] = getActiveLessons(items);
+            setLessons({
+              actives,
+              passives,
+            });
+            setLoading(false);
+          }
         });
     };
 

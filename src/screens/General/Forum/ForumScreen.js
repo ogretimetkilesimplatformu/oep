@@ -2,7 +2,13 @@ import React from 'react';
 import {View, FlatList, KeyboardAvoidingView} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import ForumItem from './components/ForumItem';
-import {ActivityIndicator, Button, Chip, TextInput} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Chip,
+  TextInput,
+  Title,
+} from 'react-native-paper';
 import AddPostForm from './components/AddPostForm';
 import {getUser, logout} from '../../../helpers/user';
 
@@ -22,16 +28,18 @@ export default function ForumScreen(props) {
       .onSnapshot((querySnapshot) => {
         let list = [];
 
-        querySnapshot.forEach((item) => {
-          list.push({
-            ...item.data(),
-            id: item.id,
+        if (querySnapshot) {
+          querySnapshot.forEach((item) => {
+            list.push({
+              ...item.data(),
+              id: item.id,
+            });
           });
-        });
 
-        setItems(list);
+          setItems(list);
 
-        setLoading(false);
+          setLoading(false);
+        }
       });
   }, []);
 

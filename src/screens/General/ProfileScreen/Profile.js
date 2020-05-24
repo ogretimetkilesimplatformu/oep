@@ -107,7 +107,11 @@ export default function ProfileScreen({navigation}) {
         }}>
         <Button
           onPress={async () => {
-            await logout();
+            try {
+              await logout();
+            } catch (e) {
+              //
+            }
 
             navigation.push('Login');
           }}
