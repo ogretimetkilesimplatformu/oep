@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {View, FlatList} from 'react-native';
 import {Button, Headline} from 'react-native-paper';
 import QuestionItem from '../../Student/Test/components/QuestionItem';
+import type {Question} from '../../Student/Test/components/QuestionItem';
 
 export type Form = {
   title: string,
